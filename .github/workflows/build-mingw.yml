@@ -36,8 +36,11 @@ jobs:
         shell: msys2 {0}
         run: |
             export PATH="${{ github.workspace }}/mingw64:${{ github.workspace }}/mingw64/bin:${{ github.workspace }}/msys64/usr/bin:/usr/bin" &&
-            cd guile && g++ --version && ./configure mingw64 -static --prefix="$(pwd)/${{ env.installationPath }}" &&
-            mingw32-make.exe install_sw
+            cd guile &&
+            g++ --version && 
+            ./autogen.sh &&
+            ./configure mingw64 -static --prefix="$(pwd)/${{ env.installationPath }}" &&
+            make install
             
       - name: Archive Release
         uses: thedoctor0/zip-release@master
