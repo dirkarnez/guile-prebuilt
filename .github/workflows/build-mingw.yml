@@ -53,7 +53,7 @@ jobs:
             cd guile &&
             g++ --version && 
             ./configure --help &&
-            ./configure mingw64 -static --prefix="$(pwd)/${{ env.installationPath }}" &&
+            ./configure --disable-rpath --prefix="$(pwd)/${{ env.installationPath }}" &&
             make install
             
       - name: Archive Release
