@@ -64,7 +64,10 @@ jobs:
           cd gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0 &&
           ls &&
           sed -i "s/prefix=\/d\/a\/gmp-prebuilt\/gmp-prebuilt\/gmp\/gmp-installation/prefix=${{ steps.set-gmp-path.outputs.GMP_PATH }}/g" ./lib/pkgconfig/gmp.pc
-          
+
+      - shell: cmd
+        run: type gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0/lib/pkgconfig/gmp.pc
+        
       - name: set PATH, check mingw version, cmake generate, build and install
         shell: msys2 {0}
         run: |
@@ -75,7 +78,7 @@ jobs:
             ./configure --help &&
             ./configure --disable-rpath  --with-libgmp-prefix="$workplace/gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0" --prefix="$(pwd)/${{ env.installationPath }}" &&
             make install
-            
+
       - name: Archive Release
         uses: thedoctor0/zip-release@master
         with:
