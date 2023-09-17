@@ -13,7 +13,7 @@ jobs:
     env:
       libraryName: guile
       installationPath: guile-installation
-      tagName: v3.0.8 # target tag
+      tagName: v3.0.9 # target tag
       mingwTargetZip: guile-${{ github.ref_name }}-x86_64-8.1.0-release-posix-seh-rt_v6-rev0.zip
     steps:
       - uses: actions/checkout@v3
