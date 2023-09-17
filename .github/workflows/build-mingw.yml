@@ -67,6 +67,9 @@ jobs:
 
       - shell: cmd
         run: type .\gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0\lib\pkgconfig\gmp.pc
+
+      - shell: cmd
+        run: del .\gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0\lib\libgmp.la
         
       - name: set PATH, check mingw version, cmake generate, build and install
         shell: msys2 {0}
