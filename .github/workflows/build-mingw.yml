@@ -50,6 +50,20 @@ jobs:
         run: |
           curl "https://github.com/dirkarnez/gmp-prebuilt/releases/download/v6.3.0/gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0.zip" -L -O -J &&^
           7z.exe x gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0.zip -o"gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0"
+
+      - shell: msys2 {0}
+        id: set-gmp-path
+        run: |
+          cd gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0 &&
+          ls &&
+          echo "GMP_PATH=$(echo "$(pwd)" | sed -e 's/[]\/$*.^[]/\\&/g')" >> "$GITHUB_OUTPUT"
+
+      - shell: msys2 {0}
+        run: |
+          echo ${{ steps.set-gmp-path.outputs.GMP_PATH }} &&
+          cd gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0 &&
+          ls &&
+          sed -i "s/prefix=\/d\/a\/gmp-prebuilt\/gmp-prebuilt\/gmp\/gmp-installation/prefix=${{ steps.set-gmp-path.outputs.GMP_PATH }}/g" ./lib/pkgconfig/gmp.pc
           
       - name: set PATH, check mingw version, cmake generate, build and install
         shell: msys2 {0}
