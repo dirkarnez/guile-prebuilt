@@ -9,36 +9,50 @@ on:
 jobs:
   build:
     name: Create Release
-    runs-on: windows-2019
+    runs-on: windows-latest
     env:
       libraryName: guile
       installationPath: guile-installation
       tagName: v3.0.8 # target tag
-      mingwTargetZip: guile-${{ github.ref_name }}-x86_64-posix-seh-rev0-8.1.0.zip
+      mingwTargetZip: guile-${{ github.ref_name }}-x86_64-8.1.0-release-posix-seh-rt_v6-rev0.zip
     steps:
       - uses: actions/checkout@v3
       
-      - name: git clone
-        shell: cmd
-        run: git clone --recursive https://git.sv.gnu.org/git/guile.git && cd guile && git checkout ${{ env.tagName }}
+      # - name: git clone
+      #   shell: cmd
+      #   run: git clone --recursive https://git.sv.gnu.org/git/guile.git && cd guile && git checkout ${{ env.tagName }}
+
+      - shell: cmd
+        run: |
+          curl https://ftp.gnu.org/gnu/guile/guile-3.0.9.tar.gz -L -O
       
       - name: Install MSYS2
         uses: msys2/setup-msys2@v2
         with:
+          update: true
           msystem: MINGW64
-          install: make autoconf automake libtool autogen perl flex
+          install: git make autoconf automake libtool autogen perl patch gperf
           
       - name: curl x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z
         shell: cmd
-        run:  cd /d ${{ github.workspace }} && curl https://github.com/2641797006/c/blob/master/GCC-zip/x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z?raw=true -L --output x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z && dir && 7z.exe x x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z
+        run:  curl https://github.com/dirkarnez/cpp-tools/raw/main/x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z -L --output x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z && 7z.exe x x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z
+      
+      - name: curl PortableGit-2.38.1-64-bit.7z.exe
+        shell: cmd
+        run:  curl https://github.com/git-for-windows/git/releases/download/v2.38.1.windows.1/PortableGit-2.38.1-64-bit.7z.exe -L --output PortableGit-2.38.1-64-bit.7z.exe && dir && 7z.exe x PortableGit-2.38.1-64-bit.7z.exe -o"${{ github.workspace }}\PortableGit-2.38.1-64-bit"
         
+      - shell: cmd
+        run: |
+          .\PortableGit-2.38.1-64-bit\usr\bin\tar.exe -zxvf guile-3.0.9.tar.gz &&^
+          rename guile-3.0.9 guile
+          
       - name: set PATH, check mingw version, cmake generate, build and install
         shell: msys2 {0}
         run: |
             export PATH="${{ github.workspace }}/mingw64:${{ github.workspace }}/mingw64/bin:${{ github.workspace }}/msys64/usr/bin:/usr/bin" &&
             cd guile &&
             g++ --version && 
-            ./autogen.sh &&
+            ./configure --help &&
             ./configure mingw64 -static --prefix="$(pwd)/${{ env.installationPath }}" &&
             make install
             
@@ -46,12 +60,12 @@ jobs:
         uses: thedoctor0/zip-release@master
         with:
           type: 'zip'
-          directory: "${{ github.workspace }}/guile/${{ env.installationPath }}"
+          directory: "guile/${{ env.installationPath }}"
           filename: "${{ env.mingwTargetZip }}"
         
       - name: Release prebuilt
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "${{ github.workspace }}/guile/${{ env.installationPath }}/${{ env.mingwTargetZip }}"
+          artifacts: "guile/${{ env.installationPath }}/${{ env.mingwTargetZip }}"
           allowUpdates: true
           token: ${{ secrets.GITHUB_TOKEN }}
