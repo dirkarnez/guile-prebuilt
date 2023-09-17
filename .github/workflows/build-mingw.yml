@@ -66,7 +66,7 @@ jobs:
           sed -i "s/prefix=\/d\/a\/gmp-prebuilt\/gmp-prebuilt\/gmp\/gmp-installation/prefix=${{ steps.set-gmp-path.outputs.GMP_PATH }}/g" ./lib/pkgconfig/gmp.pc
 
       - shell: cmd
-        run: type gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0/lib/pkgconfig/gmp.pc
+        run: type .\gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0\lib\pkgconfig\gmp.pc
         
       - name: set PATH, check mingw version, cmake generate, build and install
         shell: msys2 {0}
