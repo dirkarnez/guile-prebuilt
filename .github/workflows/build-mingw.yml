@@ -74,6 +74,9 @@ jobs:
 
       - shell: msys2 {0}
         run: cd ${{ steps.set-gmp-path.outputs.GMP_PATH }} && ls
+
+      - shell: msys2 {0}
+        run: pkg-config --version
         
       - name: set PATH, check mingw version, cmake generate, build and install
         shell: msys2 {0}
@@ -83,7 +86,7 @@ jobs:
             cd guile &&
             g++ --version && 
             ./configure --help &&
-            ./configure --disable-rpath --disable-deprecated --with-libgmp-prefix="${{ steps.set-gmp-path.outputs.GMP_PATH }}" --prefix="$(pwd)/${{ env.installationPath }}" &&
+            ./configure --disable-rpath --disable-deprecated --with-libgmp-prefix="$workspace/gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0" --prefix="$(pwd)/${{ env.installationPath }}" &&
             make install
 
       - name: Archive Release
