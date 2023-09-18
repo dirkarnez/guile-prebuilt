@@ -87,7 +87,10 @@ jobs:
           curl https://github.com/dirkarnez/libffi-prebuilt/releases/download/v3.4.3/libffi-v3.4.3-x86_64-8.1.0-release-posix-seh-rt_v6-rev0.zip -L -O &&^
           7z.exe x libffi-v3.4.3-x86_64-8.1.0-release-posix-seh-rt_v6-rev0.zip -o"libffi-v3.4.3-x86_64-8.1.0-release-posix-seh-rt_v6-rev0"
 
-
+      - shell: cmd
+        run: |
+          curl https://github.com/dirkarnez/gc-prebuilt/releases/download/v8.2.2/gc-v8.2.2-x86_64-8.1.0-release-posix-seh-rt_v6-rev0.zip -L -O &&^
+          7z.exe x gc-v8.2.2-x86_64-8.1.0-release-posix-seh-rt_v6-rev0.zip -o"gc-v8.2.2-x86_64-8.1.0-release-posix-seh-rt_v6-rev0"
 
       - shell: msys2 {0}
         run: pkg-config --version
@@ -103,6 +106,12 @@ jobs:
             export LIBFFI_LIBS="-L$workspace/libffi-v3.4.3-x86_64-8.1.0-release-posix-seh-rt_v6-rev0/lib -lffi" &&
             echo $LIBFFI_CFLAGS &&
             echo $LIBFFI_LIBS &&
+            \
+            export BDW_GC_CFLAGS="-I$workspace/gc-v8.2.2-x86_64-8.1.0-release-posix-seh-rt_v6-rev0/include" &&
+            export BDW_GC_LIBS="-L$workspace/gc-v8.2.2-x86_64-8.1.0-release-posix-seh-rt_v6-rev0/lib -lgc" &&
+            echo $BDW_GC_CFLAGS &&
+            echo $BDW_GC_LIBS &&
+            \
             ./configure --help &&
             ./configure \
             --disable-rpath \
