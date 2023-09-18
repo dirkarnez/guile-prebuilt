@@ -89,8 +89,8 @@ jobs:
 
       - shell: cmd
         run: |
-          curl https://github.com/dirkarnez/gc-prebuilt/releases/download/v8.2.2/gc-v8.2.2-x86_64-8.1.0-release-posix-seh-rt_v6-rev0.zip -L -O &&^
-          7z.exe x gc-v8.2.2-x86_64-8.1.0-release-posix-seh-rt_v6-rev0.zip -o"gc-v8.2.2-x86_64-8.1.0-release-posix-seh-rt_v6-rev0"
+          curl https://github.com/dirkarnez/bdwgc-prebuilt/releases/download/v8.2.4/bdwgc-v8.2.4-x86_64-8.1.0-release-posix-seh-rt_v6-rev0.zip -L -O &&^
+          7z.exe x bdwgc-v8.2.4-x86_64-8.1.0-release-posix-seh-rt_v6-rev0.zip -o"bdwgc-v8.2.4-x86_64-8.1.0-release-posix-seh-rt_v6-rev0"
 
       - shell: msys2 {0}
         run: pkg-config --version
@@ -107,8 +107,8 @@ jobs:
             echo $LIBFFI_CFLAGS &&
             echo $LIBFFI_LIBS &&
             \
-            export BDW_GC_CFLAGS="-I$workspace/gc-v8.2.2-x86_64-8.1.0-release-posix-seh-rt_v6-rev0/include" &&
-            export BDW_GC_LIBS="-L$workspace/gc-v8.2.2-x86_64-8.1.0-release-posix-seh-rt_v6-rev0/lib -lgc" &&
+            export BDW_GC_CFLAGS="-I$workspace/bdwgc-v8.2.4-x86_64-8.1.0-release-posix-seh-rt_v6-rev0/include" &&
+            export BDW_GC_LIBS="-L$workspace/bdwgc-v8.2.4-x86_64-8.1.0-release-posix-seh-rt_v6-rev0/lib -lgc" &&
             echo $BDW_GC_CFLAGS &&
             echo $BDW_GC_LIBS &&
             \
