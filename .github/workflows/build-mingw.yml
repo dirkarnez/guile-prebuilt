@@ -71,6 +71,9 @@ jobs:
 
       - shell: cmd
         run: type .\gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0\lib\libgmp.la
+
+      - shell: msys2 {0}
+        run: cd ${{ steps.set-gmp-path.outputs.GMP_PATH }} && ls
         
       - name: set PATH, check mingw version, cmake generate, build and install
         shell: msys2 {0}
