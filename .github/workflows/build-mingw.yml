@@ -83,7 +83,7 @@ jobs:
             cd guile &&
             g++ --version && 
             ./configure --help &&
-            ./configure --disable-rpath --with-libgmp-prefix="${{ steps.set-gmp-path.outputs.GMP_PATH }}" --prefix="$(pwd)/${{ env.installationPath }}" &&
+            ./configure --disable-rpath --disable-deprecated --with-libgmp-prefix="${{ steps.set-gmp-path.outputs.GMP_PATH }}" --prefix="$(pwd)/${{ env.installationPath }}" &&
             make install
 
       - name: Archive Release
