@@ -75,6 +75,13 @@ jobs:
       - shell: msys2 {0}
         run: cd ${{ steps.set-gmp-path.outputs.GMP_PATH }} && ls
 
+
+
+      - shell: cmd
+        run: |
+          curl https://github.com/dirkarnez/libunistring-prebuilt/releases/download/v1.1/libunistring-v1.1-x86_64-8.1.0-release-posix-seh-rt_v6-rev0.zip -L -O &&^
+          7z.exe x libunistring-v1.1-x86_64-8.1.0-release-posix-seh-rt_v6-rev0.zip -o"libunistring-v1.1-x86_64-8.1.0-release-posix-seh-rt_v6-rev0"
+
       - shell: msys2 {0}
         run: pkg-config --version
         
@@ -86,7 +93,7 @@ jobs:
             cd guile &&
             g++ --version && 
             ./configure --help &&
-            ./configure --disable-rpath --disable-deprecated --with-libgmp-prefix="$workspace/gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0" --prefix="$(pwd)/${{ env.installationPath }}" &&
+            ./configure --disable-rpath --disable-deprecated --with-libunistring-prefix="$workspace/libunistring-v1.1-x86_64-8.1.0-release-posix-seh-rt_v6-rev0" --with-libgmp-prefix="$workspace/gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0" --prefix="$(pwd)/${{ env.installationPath }}" &&
             make install
 
       - name: Archive Release
