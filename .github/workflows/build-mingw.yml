@@ -82,6 +82,13 @@ jobs:
           curl https://github.com/dirkarnez/libunistring-prebuilt/releases/download/v1.1/libunistring-v1.1-x86_64-8.1.0-release-posix-seh-rt_v6-rev0.zip -L -O &&^
           7z.exe x libunistring-v1.1-x86_64-8.1.0-release-posix-seh-rt_v6-rev0.zip -o"libunistring-v1.1-x86_64-8.1.0-release-posix-seh-rt_v6-rev0"
 
+      - shell: cmd
+        run: |
+          curl https://github.com/dirkarnez/libffi-prebuilt/releases/download/v3.4.3/libffi-v3.4.3-x86_64-8.1.0-release-posix-seh-rt_v6-rev0.zip -L -O &&^
+          7z.exe x libffi-v3.4.3-x86_64-8.1.0-release-posix-seh-rt_v6-rev0.zip -o"libffi-v3.4.3-x86_64-8.1.0-release-posix-seh-rt_v6-rev0"
+
+
+
       - shell: msys2 {0}
         run: pkg-config --version
         
@@ -92,8 +99,17 @@ jobs:
             export PATH="$workspace/mingw64:$workspace/mingw64/bin:$workspace/msys64/usr/bin:/usr/bin" &&
             cd guile &&
             g++ --version && 
+            export LIBFFI_CFLAGS="-I$workspace/libffi-v3.4.3-x86_64-8.1.0-release-posix-seh-rt_v6-rev0/include" &&
+            export LIBFFI_LIBS="-L$workspace/libffi-v3.4.3-x86_64-8.1.0-release-posix-seh-rt_v6-rev0/lib -lffi" &&
+            echo $LIBFFI_CFLAGS &&
+            echo $LIBFFI_LIBS &&
             ./configure --help &&
-            ./configure --disable-rpath --disable-deprecated --with-libunistring-prefix="$workspace/libunistring-v1.1-x86_64-8.1.0-release-posix-seh-rt_v6-rev0" --with-libgmp-prefix="$workspace/gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0" --prefix="$(pwd)/${{ env.installationPath }}" &&
+            ./configure \
+            --disable-rpath \
+            --disable-deprecated \
+            --with-libunistring-prefix="$workspace/libunistring-v1.1-x86_64-8.1.0-release-posix-seh-rt_v6-rev0" \
+            --with-libgmp-prefix="$workspace/gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0" \
+            --prefix="$(pwd)/${{ env.installationPath }}" &&
             make install
 
       - name: Archive Release
