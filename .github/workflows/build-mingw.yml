@@ -115,6 +115,7 @@ jobs:
             ./configure --help &&
             ./configure \
             --disable-rpath \
+            --disable-posix \
             --disable-deprecated \
             --with-libunistring-prefix="$workspace/libunistring-v1.1-x86_64-8.1.0-release-posix-seh-rt_v6-rev0" \
             --with-libgmp-prefix="$workspace/gmp-v6.3.0-mingw64-x86_64-posix-seh-rev0-8.1.0" \
